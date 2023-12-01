@@ -18,7 +18,7 @@ export default function Dashboard() {
     }
 
     fetchData();
-  }, [searchQuery]);
+  }, []);
 
   const filterUsers = () => {
     if (!searchQuery) {
@@ -45,6 +45,20 @@ export default function Dashboard() {
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  const handleEdit = (editedUser) => {
+    // Handle edit logic, for example, update the user in the state
+    setUsers((prevUsers) =>
+      prevUsers.map((user) => (user.id === editedUser.id ? editedUser : user))
+    );
+  };
+
+  const handleDelete = (userToDelete) => {
+    // Handle delete logic, for example, update the users state
+    setUsers((prevUsers) =>
+      prevUsers.filter((user) => user.id !== userToDelete.id)
+    );
+  };
+
   return (
     <div className="container">
       <header className="header">
@@ -55,7 +69,11 @@ export default function Dashboard() {
       </header>
 
       <main>
-        <UserTable users={currentUsers} />
+        <UserTable
+          users={currentUsers}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
       </main>
 
       <footer className="footer">

@@ -36,19 +36,30 @@ main {
   color: #fff;
 }
 
+.btn-success {
+  background-color: rgb(31, 139, 10);
+  border-radius: 1px solid rgb(31, 139, 10);
+  color: #fff;
+}
+
 .header,
 .footer {
   display: flex;
   justify-content: space-between;
 }
 
-.search-inp {
+.search-inp,
+.inp-field {
   height: 45px;
   width: 350px;
   border-radius: 7px;
   padding: 0 10px;
   font-size: 18px;
   border: 1px solid #c0c0c0;
+}
+
+.inp-field {
+  width: auto;
 }
 
 .pagination {
