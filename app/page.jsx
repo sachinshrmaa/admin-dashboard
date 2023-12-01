@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Footer from "../components/Footer";
 import UserTable from "../components/UserTable";
+import SearchBar from "../components/SearchBar";
 
 const getUsers = async () => {
   try {
@@ -50,15 +51,8 @@ export default function Dashboard() {
   return (
     <div className="container">
       <header className="header">
-        <form>
-          <input
-            type="text"
-            placeholder="Search"
-            className="search-inp"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </form>
+        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+
         <button className="btn btn-danger">
           <i className="bi bi-trash"></i>
         </button>
