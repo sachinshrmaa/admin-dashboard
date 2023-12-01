@@ -1,26 +1,6 @@
-"use client"
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 
-const UserTable = () => {
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get(
-          "https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json"
-        );
-        const userData = response.data;
-        setUsers(userData);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchUsers();
-  }, []);
-
+const UserTable = ({ users }) => {
   return (
     <div>
       <table className="users-table">
