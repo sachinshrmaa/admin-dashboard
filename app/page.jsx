@@ -62,10 +62,9 @@ export default function Dashboard() {
     <div className="container">
       <header className="header">
         <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-
-        <button className="btn btn-danger">
-          <i className="bi bi-trash"></i>
-        </button>
+        <p>
+          Page {currentPage} 0f {Math.ceil(filteredUsers.length / usersPerPage)}
+        </p>
       </header>
 
       <main>
@@ -73,9 +72,10 @@ export default function Dashboard() {
       </main>
 
       <footer className="footer">
-        <p>
-          Page {currentPage} 0f {Math.ceil(filteredUsers.length / usersPerPage)}
-        </p>
+        <button className="btn btn-danger">
+          Delete Seleceted <i className="bi bi-trash"></i>
+        </button>
+
         <Pagination
           postsPerPage={usersPerPage}
           totalPosts={filteredUsers.length}

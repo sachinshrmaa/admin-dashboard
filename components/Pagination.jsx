@@ -10,7 +10,7 @@ const Pagination = ({ postsPerPage, totalPosts, currentPage, paginate }) => {
   return (
     <nav className="pagination">
       <button
-        className="btn-paginate"
+        className="btn-paginate first-page"
         type="button"
         onClick={() => paginate(1)}
         disabled={currentPage === 1}
@@ -18,7 +18,7 @@ const Pagination = ({ postsPerPage, totalPosts, currentPage, paginate }) => {
         &laquo;
       </button>
       <button
-        className="btn-paginate"
+        className="btn-paginate previous-page"
         type="button"
         onClick={() => paginate(currentPage - 1)}
         disabled={currentPage <= 1}
@@ -38,7 +38,7 @@ const Pagination = ({ postsPerPage, totalPosts, currentPage, paginate }) => {
       ))}
 
       <button
-        className="btn-paginate"
+        className="btn-paginate next-page"
         type="button"
         onClick={() => paginate(currentPage + 1)}
         disabled={currentPage >= Math.ceil(totalPosts / postsPerPage)}
@@ -46,7 +46,7 @@ const Pagination = ({ postsPerPage, totalPosts, currentPage, paginate }) => {
         &gt;
       </button>
       <button
-        className="btn-paginate"
+        className="btn-paginate last-page"
         type="button"
         onClick={() => paginate(Math.ceil(totalPosts / postsPerPage))}
         disabled={currentPage === Math.ceil(totalPosts / postsPerPage)}
