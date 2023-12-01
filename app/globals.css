@@ -1,0 +1,88 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+main {
+  margin: 25px 0;
+}
+
+.container {
+  width: 80%;
+  margin: auto;
+  padding: 20px;
+}
+
+.bi-trash,
+.bi-pencil-square {
+  font-size: 18px;
+}
+
+.btn {
+  border-radius: 7px;
+  border: 1px solid #c0c0c0;
+  padding: 10px 15px;
+  cursor: pointer;
+  background-color: transparent;
+  font-size: 18px;
+}
+
+.btn-danger {
+  background-color: rgb(255, 96, 96);
+  border-radius: 1px solid rgb(182, 42, 42);
+  color: #fff;
+}
+
+.header,
+.footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.search-inp {
+  height: 45px;
+  width: 350px;
+  border-radius: 7px;
+  padding: 0 10px;
+  font-size: 18px;
+  border: 1px solid #c0c0c0;
+}
+
+.pagination {
+  display: flex;
+  gap: 8px;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #c0c0c0;
+}
+
+thead th {
+  background-color: #f2f2f2;
+  padding: 10px;
+  text-align: left;
+}
+
+tbody tr {
+  border-bottom: 1px solid #ddd;
+}
+
+tbody td {
+  padding: 10px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+  padding: 5px;
+}
