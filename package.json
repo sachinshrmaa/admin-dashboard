@@ -1,0 +1,18 @@
+{
+  "name": "admin-dashboard",
+  "version": "1.0.0",
+  "description": "Dashboard interface for admins",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "author": "Sachin Sharma",
+  "license": "ISC",
+  "dependencies": {
+    "next": "^14.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
