@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Footer from "../components/Footer";
 import UserTable from "../components/UserTable";
 import SearchBar from "../components/SearchBar";
+import Pagination from "../components/Pagination";
 
 const getUsers = async () => {
   try {
@@ -21,6 +21,8 @@ const getUsers = async () => {
 export default function Dashboard() {
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [usersPerPage] = useState(10);
 
   useEffect(() => {
     async function fetchData() {
@@ -29,7 +31,7 @@ export default function Dashboard() {
     }
 
     fetchData();
-  }, []);
+  }, [searchQuery]);
 
   const filterUsers = () => {
     if (!searchQuery) {
@@ -48,6 +50,14 @@ export default function Dashboard() {
 
   const filteredUsers = filterUsers();
 
+  // Get current posts
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div className="container">
       <header className="header">
@@ -59,10 +69,19 @@ export default function Dashboard() {
       </header>
 
       <main>
-        <UserTable users={filteredUsers} />
+        <UserTable users={currentUsers} />
       </main>
 
-      <Footer />
+      <footer className="footer">
+        <p>
+          Page {currentPage} 0f {Math.ceil(filteredUsers.length / usersPerPage)}
+        </p>
+        <Pagination
+          postsPerPage={usersPerPage}
+          totalPosts={filteredUsers.length}
+          paginate={paginate}
+        />
+      </footer>
     </div>
   );
 }

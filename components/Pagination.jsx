@@ -1,12 +1,60 @@
 import React from "react";
 
-export default function Pagination() {
+const Pagination = ({ postsPerPage, totalPosts, currentPage, paginate }) => {
+  const pageNumbers = [];
+
+  for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
   return (
-    <div className="pagination">
-      <button className="btn">&larr;</button>
-      <button className="btn">1</button>
-      <button className="btn">2</button>
-      <button className="btn">&rarr;</button>
-    </div>
+    <nav className="pagination">
+      <button
+        className="btn-paginate"
+        type="button"
+        onClick={() => paginate(1)}
+        disabled={currentPage === 1}
+      >
+        &laquo;
+      </button>
+      <button
+        className="btn-paginate"
+        type="button"
+        onClick={() => paginate(currentPage - 1)}
+        disabled={currentPage <= 1}
+      >
+        &lt;
+      </button>
+
+      {pageNumbers.map((number) => (
+        <button
+          className={`btn-paginate ${number === currentPage ? "active" : ""}`}
+          type="button"
+          key={number}
+          onClick={() => paginate(number)}
+        >
+          {number}
+        </button>
+      ))}
+
+      <button
+        className="btn-paginate"
+        type="button"
+        onClick={() => paginate(currentPage + 1)}
+        disabled={currentPage >= Math.ceil(totalPosts / postsPerPage)}
+      >
+        &gt;
+      </button>
+      <button
+        className="btn-paginate"
+        type="button"
+        onClick={() => paginate(Math.ceil(totalPosts / postsPerPage))}
+        disabled={currentPage === Math.ceil(totalPosts / postsPerPage)}
+      >
+        &raquo;
+      </button>
+    </nav>
   );
-}
+};
+
+export default Pagination;

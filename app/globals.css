@@ -56,6 +56,16 @@ main {
   gap: 8px;
 }
 
+.btn-paginate {
+  font-size: 14px;
+  border-radius: 5px;
+  height: 32px;
+  width: 32px;
+  border: 1px solid #c0c0c0;
+  background-color: transparent;
+  cursor: pointer;
+}
+
 .users-table {
   width: 100%;
   border-collapse: collapse;
