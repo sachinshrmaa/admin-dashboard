@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import getUsers from "../utils/getUsers";
+import Pagination from "./Pagination";
 
 export default function App() {
   const [users, setUsers] = useState([]);
@@ -13,13 +15,41 @@ export default function App() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(
-      "https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json"
-    )
-      .then((response) => response.json())
-      .then((data) => setUsers(data));
-    setLoading(false);
+
+    async function fetchData() {
+      const loadedUsers = await getUsers();
+      setUsers(loadedUsers);
+      setLoading(false);
+    }
+
+    fetchData();
   }, []);
+
+  const filteredUsers = users.filter((user) => {
+    const searchText = searchQuery.toLowerCase();
+    return Object.values(user).some(
+      (value) =>
+        typeof value === "string" && value.toLowerCase().includes(searchText)
+    );
+  });
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  // Get current users for the current page
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const pageNumbers = [];
+
+  for (let i = 1; i <= Math.ceil(filteredUsers.length / usersPerPage); i++) {
+    pageNumbers.push(i);
+  }
 
   const handleSelectRow = (userId) => {
     const newSelectedRows = [...selectedRows];
@@ -35,18 +65,6 @@ export default function App() {
     setUsers(users.filter((user) => !selectedRows.includes(user.id)));
     setSelectedRows([]);
   };
-
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
-  };
-
-  const filteredUsers = users.filter((user) => {
-    const searchText = searchQuery.toLowerCase();
-    return Object.values(user).some(
-      (value) =>
-        typeof value === "string" && value.toLowerCase().includes(searchText)
-    );
-  });
 
   const handleDelete = (userToDelete) => {
     setUsers((prevUsers) =>
@@ -75,20 +93,6 @@ export default function App() {
   const handleCancelEdit = () => {
     setEditingUserId(null);
   };
-
-  // Get current users for the current page
-  const indexOfLastUser = currentPage * usersPerPage;
-  const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-
-  // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const pageNumbers = [];
-
-  for (let i = 1; i <= Math.ceil(filteredUsers.length / usersPerPage); i++) {
-    pageNumbers.push(i);
-  }
 
   const handleSelectAll = (event) => {
     const checked = event.target.checked;
@@ -233,60 +237,14 @@ export default function App() {
         <span>
           Page {currentPage} of {Math.ceil(filteredUsers.length / usersPerPage)}
         </span>
-        <nav className="pagination">
-          <button
-            className="btn-paginate first-page"
-            type="button"
-            onClick={() => paginate(1)}
-            disabled={currentPage === 1}
-          >
-            <i className="bi bi-chevron-double-left"></i>
-          </button>
-          <button
-            className="btn-paginate previous-page"
-            type="button"
-            onClick={() => paginate(currentPage - 1)}
-            disabled={currentPage <= 1}
-          >
-            <i className="bi bi-chevron-left"></i>
-          </button>
 
-          {pageNumbers.map((number) => (
-            <button
-              className={`btn-paginate ${
-                number === currentPage ? "active" : ""
-              }`}
-              type="button"
-              key={number}
-              onClick={() => paginate(number)}
-            >
-              {number}
-            </button>
-          ))}
-
-          <button
-            className="btn-paginate next-page"
-            type="button"
-            onClick={() => paginate(currentPage + 1)}
-            disabled={
-              currentPage >= Math.ceil(filteredUsers.length / usersPerPage)
-            }
-          >
-            <i className="bi bi-chevron-right"></i>
-          </button>
-          <button
-            className="btn-paginate last-page"
-            type="button"
-            onClick={() =>
-              paginate(Math.ceil(filteredUsers.length / usersPerPage))
-            }
-            disabled={
-              currentPage === Math.ceil(filteredUsers.length / usersPerPage)
-            }
-          >
-            <i className="bi bi-chevron-double-right"></i>
-          </button>
-        </nav>
+        <Pagination
+          paginate={paginate}
+          currentPage={currentPage}
+          pageNumbers={pageNumbers}
+          filteredUsers={filteredUsers}
+          usersPerPage={usersPerPage}
+        />
       </footer>
     </div>
   );
