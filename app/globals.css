@@ -10,6 +10,12 @@ main {
   margin: 25px 0;
 }
 
+.navbar{
+  background-color: #efefef;
+  color: #000;
+  margin-bottom: 20px;
+}
+
 .container {
   width: 80%;
   margin: auto;
