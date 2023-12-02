@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Pagination from "./Pagination";
 
 export default function App() {
   const [users, setUsers] = useState([]);
@@ -17,6 +18,15 @@ export default function App() {
       .then((response) => response.json())
       .then((data) => setUsers(data));
   }, []);
+
+  const handleSelectAll = (event) => {
+    const checked = event.target.checked;
+    if (checked) {
+      setSelectedRows(users.map((user) => user.id));
+    } else {
+      setSelectedRows([]);
+    }
+  };
 
   const handleSelectRow = (userId) => {
     const newSelectedRows = [...selectedRows];
@@ -39,9 +49,8 @@ export default function App() {
 
   const filteredUsers = users.filter((user) => {
     const searchText = searchQuery.toLowerCase();
-    return Object.values(user).some(
-      (value) =>
-        typeof value === "string" && value.toLowerCase().includes(searchText)
+    return Object.values(user).some((value) =>
+      value.toString().toLowerCase().includes(searchText)
     );
   });
 
@@ -55,10 +64,13 @@ export default function App() {
     setUsers((prevUsers) =>
       prevUsers.map((user) => (user.id === editedUser.id ? editedUser : user))
     );
+    setEditingUserId(null); // Exit edit mode after saving
   };
 
   const handleSaveEdit = (editedUser) => {
+    // Check if any field is empty before saving
     if (!editedUser.name || !editedUser.email) {
+      // You can display an error message or handle it as needed
       return;
     }
 
@@ -66,14 +78,14 @@ export default function App() {
       prevUsers.map((user) => (user.id === editedUser.id ? editedUser : user))
     );
 
-    setEditingUserId(null);
+    setEditingUserId(null); // Exit edit mode after saving
   };
 
   const handleCancelEdit = () => {
-    setEditingUserId(null);
+    setEditingUserId(null); // Cancel editing and exit edit mode
   };
 
-  // Get current users for the current page
+  // Get current posts
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
@@ -81,39 +93,19 @@ export default function App() {
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const pageNumbers = [];
-
-  for (let i = 1; i <= Math.ceil(filteredUsers.length / usersPerPage); i++) {
-    pageNumbers.push(i);
-  }
-
-  const handleSelectAll = (event) => {
-    const checked = event.target.checked;
-    if (checked) {
-      setSelectedRows(currentUsers.map((user) => user.id));
-    } else {
-      setSelectedRows([]);
-    }
-  };
-
   return (
     <div>
       <div className="header">
         <input
           type="text"
-          placeholder="Search by name, email, role"
+          placeholder="Search"
           value={searchQuery}
           onChange={handleSearchChange}
           className="search-inp"
         />
-
-        <button
-          disabled={!selectedRows.length}
-          onClick={handleDeleteSelected}
-          className="btn btn-danger"
-        >
-          Delete Selected <i className="bi bi-trash"> </i>
-        </button>
+        <p>
+          Page {currentPage} of {Math.ceil(filteredUsers.length / usersPerPage)}{" "}
+        </p>
       </div>
       <table className="users-table">
         <thead>
@@ -121,7 +113,7 @@ export default function App() {
             <th>
               <input
                 type="checkbox"
-                checked={selectedRows.length === currentUsers.length}
+                checked={selectedRows.length === filteredUsers.length}
                 onChange={handleSelectAll}
               />
             </th>
@@ -134,10 +126,7 @@ export default function App() {
         </thead>
         <tbody>
           {currentUsers.map((user) => (
-            <tr
-              key={user.id}
-              className={selectedRows.includes(user.id) ? "selected" : ""}
-            >
+            <tr key={user.id}>
               <td>
                 <input
                   type="checkbox"
@@ -150,7 +139,7 @@ export default function App() {
                 {editingUserId === user.id ? (
                   <input
                     type="text"
-                    defaultValue={user.name}
+                    value={user.name}
                     className="inp-field"
                     onChange={(e) =>
                       handleEdit({ ...user, name: e.target.value })
@@ -160,7 +149,6 @@ export default function App() {
                   user.name
                 )}
               </td>
-
               <td>
                 {editingUserId === user.id ? (
                   <input
@@ -175,48 +163,36 @@ export default function App() {
                   user.email
                 )}
               </td>
-              <td>
-                {editingUserId === user.id ? (
-                  <select
-                    value={user.role}
-                    onChange={(e) =>
-                      handleEdit({ ...user, role: e.target.value })
-                    }
-                    className="inp-field"
-                  >
-                    <option value="member">Member</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                ) : (
-                  user.role
-                )}
-              </td>
+              <td>{user.role}</td>
               <td className="actions">
                 {editingUserId === user.id ? (
                   <>
                     <button
-                      className="btn save"
+                      className="btn"
                       onClick={() => handleSaveEdit(user)}
                     >
-                      <i className="bi bi-check-lg"> </i>
+                      Save
                     </button>
-                    <button className="btn" onClick={handleCancelEdit}>
-                      <i className="bi bi-x-lg"> </i>
+                    <button
+                      className="btn btn-danger"
+                      onClick={handleCancelEdit}
+                    >
+                      Cancel
                     </button>
                   </>
                 ) : (
                   <>
                     <button
-                      className="btn edit"
+                      className="btn"
                       onClick={() => setEditingUserId(user.id)}
                     >
-                      <i className="bi bi-pencil-square"> </i>
+                      Edit
                     </button>
                     <button
-                      className="btn delete"
+                      className="btn btn-danger"
                       onClick={() => handleDelete(user)}
                     >
-                      <i className="bi bi-trash"> </i>
+                      Delete
                     </button>
                   </>
                 )}
@@ -226,63 +202,19 @@ export default function App() {
         </tbody>
       </table>
       <footer className="footer">
-        <span>
-          Page {currentPage} of {Math.ceil(filteredUsers.length / usersPerPage)}
-        </span>
-        <nav className="pagination">
-          <button
-            className="btn-paginate first-page"
-            type="button"
-            onClick={() => paginate(1)}
-            disabled={currentPage === 1}
-          >
-            <i className="bi bi-chevron-double-left"></i>
-          </button>
-          <button
-            className="btn-paginate previous-page"
-            type="button"
-            onClick={() => paginate(currentPage - 1)}
-            disabled={currentPage <= 1}
-          >
-            <i className="bi bi-chevron-left"></i>
-          </button>
+        <button
+          disabled={!selectedRows.length}
+          onClick={handleDeleteSelected}
+          className="btn btn-danger"
+        >
+          Delete Selected
+        </button>
 
-          {pageNumbers.map((number) => (
-            <button
-              className={`btn-paginate ${
-                number === currentPage ? "active" : ""
-              }`}
-              type="button"
-              key={number}
-              onClick={() => paginate(number)}
-            >
-              {number}
-            </button>
-          ))}
-
-          <button
-            className="btn-paginate next-page"
-            type="button"
-            onClick={() => paginate(currentPage + 1)}
-            disabled={
-              currentPage >= Math.ceil(filteredUsers.length / usersPerPage)
-            }
-          >
-            <i className="bi bi-chevron-right"></i>
-          </button>
-          <button
-            className="btn-paginate last-page"
-            type="button"
-            onClick={() =>
-              paginate(Math.ceil(filteredUsers.length / usersPerPage))
-            }
-            disabled={
-              currentPage === Math.ceil(filteredUsers.length / usersPerPage)
-            }
-          >
-            <i className="bi bi-chevron-double-right"></i>
-          </button>
-        </nav>
+        <Pagination
+          postsPerPage={usersPerPage}
+          totalPosts={filteredUsers.length}
+          paginate={paginate}
+        />
       </footer>
     </div>
   );

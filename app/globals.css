@@ -30,14 +30,14 @@ main {
   font-size: 18px;
 }
 
-.btn-danger {
+.delete {
   border: 1px solid rgb(255, 96, 96);
   background-color: rgb(255, 96, 96);
   border-radius: 1px solid rgb(182, 42, 42);
   color: #fff;
 }
 
-.btn-success {
+.save {
   border: 1px solid rgb(31, 139, 10);
   background-color: rgb(31, 139, 10);
   border-radius: 1px solid rgb(31, 139, 10);
