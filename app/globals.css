@@ -31,12 +31,14 @@ main {
 }
 
 .btn-danger {
+  border: 1px solid rgb(255, 96, 96);
   background-color: rgb(255, 96, 96);
   border-radius: 1px solid rgb(182, 42, 42);
   color: #fff;
 }
 
 .btn-success {
+  border: 1px solid rgb(31, 139, 10);
   background-color: rgb(31, 139, 10);
   border-radius: 1px solid rgb(31, 139, 10);
   color: #fff;
@@ -77,10 +79,16 @@ main {
   cursor: pointer;
 }
 
+.active,
+.selected {
+  background: #efefef;
+}
+
 .users-table {
   width: 100%;
   border-collapse: collapse;
   border: 1px solid #c0c0c0;
+  margin: 20px 0;
 }
 
 thead th {
@@ -108,12 +116,13 @@ a {
   padding: 5px;
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 800px) {
   body {
     font-size: 16px;
   }
 
   .container {
     width: 90%;
+    padding: 30px 0px;
   }
 }
