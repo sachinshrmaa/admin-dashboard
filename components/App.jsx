@@ -9,13 +9,16 @@ export default function App() {
   const [editingUserId, setEditingUserId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(10);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     fetch(
       "https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json"
     )
       .then((response) => response.json())
       .then((data) => setUsers(data));
+    setLoading(false);
   }, []);
 
   const handleSelectRow = (userId) => {
@@ -115,6 +118,7 @@ export default function App() {
           Delete Selected <i className="bi bi-trash"> </i>
         </button>
       </div>
+      {loading && <p className="loading">loading users...</p>}
       <table className="users-table">
         <thead>
           <tr>

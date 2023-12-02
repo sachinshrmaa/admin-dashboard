@@ -16,6 +16,11 @@ main {
   padding: 20px;
 }
 
+.loading{
+  text-align: center;
+  margin: 50px 0;
+}
+
 .bi-trash,
 .bi-pencil-square {
   font-size: 18px;
